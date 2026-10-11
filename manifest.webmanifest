@@ -1,0 +1,19 @@
+{
+  "name": "ONCE · 한 번의 생",
+  "short_name": "ONCE",
+  "description": "어디서 태어날지 고를 수 없는 단 한 번의 인생 시뮬레이션",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070B1A",
+  "theme_color": "#070B1A",
+  "categories": ["games", "education", "simulation"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

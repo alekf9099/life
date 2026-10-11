@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ONCE · 한 번의 생</title>
+  <meta name="description" content="어디서, 누구에게서 태어날지 고를 수 없다면? 44개국 실제 통계로 살아보는 단 한 번의 인생 시뮬레이션.">
+  <meta name="theme-color" content="#070B1A">
+  <meta property="og:title" content="ONCE · 한 번의 생">
+  <meta property="og:description" content="오늘 태어나는 36만 명 중 한 명이 되어, 단 한 번의 삶을 살아 보세요.">
+  <meta property="og:image" content="icons/og.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="sky" aria-hidden="true"></canvas>
+
+  <div class="app">
+    <!-- 상단 바 -->
+    <header class="topbar">
+      <button class="brand" data-go="home" aria-label="처음으로">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 2l2.4 7.2H22l-6.2 4.5 2.4 7.3L12 16.5 5.8 21l2.4-7.3L2 9.2h7.6z" fill="currentColor"/></svg>
+        <span>ONCE</span>
+      </button>
+      <nav class="topnav">
+        <button class="icon-btn" data-go="sky" aria-label="나의 별자리">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="5" cy="6" r="2"/><circle cx="18" cy="5" r="1.6"/><circle cx="12" cy="13" r="2.2"/><circle cx="19" cy="19" r="1.6"/><circle cx="5" cy="19" r="1.4"/><path d="M5 6l7 7 6-8M12 13l7 6M12 13l-7 6" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"/></svg>
+          <span class="badge" id="lifeCount" hidden>0</span>
+        </button>
+        <button class="icon-btn" id="themeBtn" aria-label="밝기 전환">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+    </header>
+
+    <!-- 1. 홈 -->
+    <main class="screen" data-screen="home">
+      <section class="hero">
+        <p class="eyebrow"><span class="pulse"></span>오늘, 지구에서 지금까지 태어난 아기</p>
+        <p class="counter" id="todayBirths">0</p>
+        <h1>단 한 번,<br><em>고를 수 없는</em> 삶.</h1>
+        <p class="lede">1초에 네 명꼴로 아기가 태어납니다. 그중 한 명이 되어 처음부터 끝까지 살아 보세요. 나라도, 집안도, 성별도 실제 확률대로 정해집니다.</p>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>아기 100명이 태어난다면</h2>
+          <span class="chip" id="dotMode">실제 출생 비율</span>
+        </div>
+        <div class="dots100" id="dots100" role="img" aria-label="나라별 출생 비율을 100개의 점으로 표현"></div>
+        <ul class="legend" id="legend"></ul>
+      </section>
+
+      <section class="card settings">
+        <h2>태어나기 전에</h2>
+
+        <fieldset class="seg-group">
+          <legend>한 생의 길이</legend>
+          <div class="seg" role="radiogroup" data-key="pace">
+            <button role="radio" data-val="3">3분<small>출퇴근길</small></button>
+            <button role="radio" data-val="8">8분<small>커피 한 잔</small></button>
+            <button role="radio" data-val="15">15분<small>천천히</small></button>
+          </div>
+        </fieldset>
+
+        <fieldset class="seg-group">
+          <legend>나라를 뽑는 방식</legend>
+          <div class="seg" role="radiogroup" data-key="mode">
+            <button role="radio" data-val="births">실제 출생 비율</button>
+            <button role="radio" data-val="even">모든 나라 같은 확률</button>
+          </div>
+        </fieldset>
+
+        <label class="toggle-row">
+          <span>
+            <strong>선택을 운에 맡기기</strong>
+            <small>인생의 갈림길에서 자동으로 고릅니다</small>
+          </span>
+          <input type="checkbox" id="autoPick" class="switch">
+        </label>
+
+        <label class="select-row">
+          <span>
+            <strong>내가 실제로 태어난 나라</strong>
+            <small>고르면 마지막에 나란히 비교해요. 이 기기에만 저장됩니다.</small>
+          </span>
+          <select id="myCountry"><option value="">선택 안 함</option></select>
+        </label>
+      </section>
+
+      <p class="notice">질병, 가난, 분쟁, 이른 죽음 같은 무거운 순간이 실제 통계만큼 등장합니다. 15세 이상 이용을 권장해요.</p>
+
+      <footer class="foot">
+        <button class="link" data-go="about">데이터와 계산 방법</button>
+        <span>·</span>
+        <span>v1.0</span>
+      </footer>
+
+      <div class="cta-bar">
+        <button class="cta" id="bornBtn">
+          <span>태어나기</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </main>
+
+    <!-- 2. 출생 뽑기 -->
+    <main class="screen" data-screen="birth" hidden>
+      <div class="birth-stage">
+        <p class="eyebrow" id="birthHint">어디에서 눈을 뜰까요</p>
+        <div class="roulette" id="roulette" aria-live="polite">
+          <span class="r-flag" id="rFlag">🌍</span>
+          <span class="r-name" id="rName">…</span>
+        </div>
+        <div class="birth-card" id="birthCard" hidden>
+          <p class="odds" id="birthOdds"></p>
+          <p class="birth-text" id="birthText"></p>
+          <dl class="facts" id="birthFacts"></dl>
+          <button class="cta wide" id="startLifeBtn">첫 숨 쉬기</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- 3. 삶 -->
+    <main class="screen" data-screen="life" hidden>
+      <div class="life-head">
+        <div class="who">
+          <span class="who-flag" id="lifeFlag"></span>
+          <div>
+            <p class="who-country" id="lifeCountry"></p>
+            <p class="who-year" id="lifeYear"></p>
+          </div>
+        </div>
+        <p class="age"><span id="lifeAge">0</span><small>세</small></p>
+      </div>
+
+      <div class="stats" id="stats">
+        <div class="stat" data-k="h"><span class="stat-label">건강</span><span class="bar"><i></i></span><b>0</b></div>
+        <div class="stat" data-k="j"><span class="stat-label">행복</span><span class="bar"><i></i></span><b>0</b></div>
+        <div class="stat" data-k="k"><span class="stat-label">배움</span><span class="bar"><i></i></span><b>0</b></div>
+        <div class="stat" data-k="r"><span class="stat-label">관계</span><span class="bar"><i></i></span><b>0</b></div>
+      </div>
+
+      <div class="mini-row">
+        <div class="mini">
+          <p class="mini-label">연 소득 <small>(구매력 기준)</small></p>
+          <p class="mini-val" id="lifeIncome">—</p>
+        </div>
+        <div class="mini">
+          <p class="mini-label">동갑내기 100명 중 생존</p>
+          <div class="cohort" id="cohort"></div>
+        </div>
+      </div>
+
+      <p class="spark-label">행복 곡선 <small>— 점선 끝은 이 나라 평균 수명</small></p>
+      <svg class="spark" id="spark" viewBox="0 0 300 48" preserveAspectRatio="none" aria-label="행복 곡선"></svg>
+
+      <ol class="feed" id="feed" aria-live="polite"></ol>
+
+      <div class="player">
+        <button class="icon-btn lg" id="playBtn" aria-label="일시정지"></button>
+        <div class="speeds" role="radiogroup" aria-label="속도">
+          <button data-speed="1">1×</button>
+          <button data-speed="2">2×</button>
+          <button data-speed="4">4×</button>
+          <button data-speed="16">16×</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- 4. 끝 -->
+    <main class="screen" data-screen="end" hidden>
+      <div class="end-head">
+        <div class="rising-star" aria-hidden="true"></div>
+        <p class="eyebrow">한 생이 끝났어요</p>
+        <h2 id="endTitle"></h2>
+      </div>
+
+      <article class="receipt" id="receipt"></article>
+
+      <section class="card compare" id="compare" hidden></section>
+
+      <section class="card">
+        <h2>이 삶에 한마디</h2>
+        <textarea id="epitaph" maxlength="80" rows="2" placeholder="예: 짧았지만 많이 웃었던 삶"></textarea>
+        <p class="hint"><span id="epiCount">0</span>/80 · 별자리에 함께 저장돼요</p>
+      </section>
+
+      <div class="btn-row">
+        <button class="ghost" id="shareBtn">이미지로 공유</button>
+        <button class="ghost" data-go="sky">나의 별자리</button>
+      </div>
+      <div class="cta-bar">
+        <button class="cta" id="againBtn">다시 태어나기</button>
+      </div>
+    </main>
+
+    <!-- 5. 나의 별자리 -->
+    <main class="screen" data-screen="sky" hidden>
+      <section class="sky-head">
+        <p class="eyebrow">나의 별자리</p>
+        <h2 id="skyTitle">아직 별이 없어요</h2>
+        <p class="lede small">끝까지 살아 낸 삶은 별이 됩니다. 별의 크기는 수명, 색은 평균 행복이에요.</p>
+      </section>
+      <canvas id="constellation" class="constellation"></canvas>
+      <ul class="life-list" id="lifeList"></ul>
+      <button class="link danger" id="clearBtn" hidden>모든 별 지우기</button>
+    </main>
+
+    <!-- 6. 정보 -->
+    <main class="screen prose" data-screen="about" hidden>
+      <h2>데이터와 계산 방법</h2>
+      <h3>어떤 데이터를 쓰나요</h3>
+      <p>전 세계 출생아의 약 4분의 3(연 1억 명가량)을 차지하는 44개국의 통계를 씁니다. 모두 2022–2023년 무렵의 공개 통계를 반올림한 근사치예요.</p>
+      <ul>
+        <li><b>출생아 수 · 기대수명 · 합계출산율</b> — UN 세계인구전망(WPP)</li>
+        <li><b>1인당 GDP(PPP) · 지니계수 · 대학 취학률</b> — 세계은행 WDI</li>
+        <li><b>영아사망률</b> — UNICEF·WHO</li>
+        <li><b>평균 교육연수</b> — UNDP 인간개발보고서</li>
+        <li><b>삶의 만족도</b> — 세계행복보고서</li>
+      </ul>
+      <h3>어떻게 계산하나요</h3>
+      <ul>
+        <li><b>나라</b>: 출생아 수에 비례해 뽑습니다(‘모든 나라 같은 확률’을 고르면 균등).</li>
+        <li><b>수명</b>: 영아사망률과 곰페르츠 사망 곡선을 그 나라 기대수명에 맞춰 보정한 뒤, 해마다 생존을 굴립니다. 건강이 평균보다 좋으면 위험이 줄고, 나쁘면 커집니다.</li>
+        <li><b>소득</b>: 1인당 GDP와 지니계수로 로그정규 분포를 만들고 가족 형편과 교육연수로 위치를 정합니다. 원화 환산은 한국 구매력 환산계수(약 870원/달러) 기준이에요.</li>
+        <li><b>세계 소득 순위</b>: 세계 전체를 하나의 분포(평균 약 2만 3천 달러, 지니 약 0.62)로 근사한 추정치입니다.</li>
+      </ul>
+      <h3>한계</h3>
+      <p>통계는 평균일 뿐 한 사람의 삶을 설명하지 못합니다. 지역, 민족, 장애, 성소수자 여부처럼 삶을 크게 바꾸는 요인은 반영하지 못했어요. 이 시뮬레이션은 운의 무게를 느껴 보기 위한 것이지 예측이 아닙니다.</p>
+      <h3>개인정보</h3>
+      <p>로그인도 서버도 없습니다. 지난 삶과 설정은 이 기기의 브라우저에만 저장됩니다.</p>
+      <button class="ghost" data-go="home">돌아가기</button>
+    </main>
+  </div>
+
+  <!-- 선택 시트 -->
+  <div class="sheet-backdrop" id="sheet" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetQ">
+      <div class="grabber"></div>
+      <p class="eyebrow" id="sheetAge"></p>
+      <h3 id="sheetQ"></h3>
+      <div class="choices" id="sheetChoices"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/sim.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
