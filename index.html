@@ -42,8 +42,33 @@
       <section class="hero">
         <p class="eyebrow"><span class="pulse"></span>오늘, 지구에서 지금까지 태어난 아기</p>
         <p class="counter" id="todayBirths">0</p>
-        <h1>단 한 번,<br><em>고를 수 없는</em> 삶.</h1>
-        <p class="lede">1초에 네 명꼴로 아기가 태어납니다. 그중 한 명이 되어 처음부터 끝까지 살아 보세요. 나라도, 집안도, 성별도 실제 확률대로 정해집니다.</p>
+        <h1>내가 받은 운은<br><em>손주에게까지</em> 닿을까.</h1>
+        <p class="lede">어디서 태어날지는 고를 수 없어요. 하지만 내 선택은 아이의 출발선이 됩니다. 실제 통계로 3대를 살아 보세요.</p>
+      </section>
+
+      <section class="modes" role="radiogroup" aria-label="모드 선택">
+        <button class="mode-card" role="radio" data-mode="family">
+          <span class="mode-icon">🌳</span>
+          <span class="mode-body">
+            <strong>3대 가계도 <em class="tag">추천</em></strong>
+            <small>나 → 내 아이 → 내 손주. 형편·배움·이주·유산이 다음 세대로 이어져요</small>
+          </span>
+        </button>
+        <button class="mode-card" role="radio" data-mode="daily">
+          <span class="mode-icon">📅</span>
+          <span class="mode-body">
+            <strong>오늘의 아이 <em class="tag ghost-tag" id="dailyNo">#1</em></strong>
+            <small id="dailyDesc">오늘 하루, 모두가 같은 아이로 태어나요. 3분 · 하루 한 번</small>
+          </span>
+          <span class="streak" id="streak" hidden></span>
+        </button>
+        <button class="mode-card" role="radio" data-mode="single">
+          <span class="mode-icon">⭐</span>
+          <span class="mode-body">
+            <strong>한 생</strong>
+            <small>무작위로 태어나 한 번의 삶만 살아요</small>
+          </span>
+        </button>
       </section>
 
       <section class="card">
@@ -59,7 +84,7 @@
         <h2>태어나기 전에</h2>
 
         <fieldset class="seg-group">
-          <legend>한 생의 길이</legend>
+          <legend>한 생의 길이 <small class="legend-note">가계도는 세대마다 · 오늘의 아이는 3분 고정</small></legend>
           <div class="seg" role="radiogroup" data-key="pace">
             <button role="radio" data-val="3">3분<small>출퇴근길</small></button>
             <button role="radio" data-val="8">8분<small>커피 한 잔</small></button>
@@ -97,12 +122,12 @@
       <footer class="foot">
         <button class="link" data-go="about">데이터와 계산 방법</button>
         <span>·</span>
-        <span>v1.0</span>
+        <span>v2.0</span>
       </footer>
 
       <div class="cta-bar">
         <button class="cta" id="bornBtn">
-          <span>태어나기</span>
+          <span id="bornLabel">태어나기</span>
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
@@ -127,6 +152,7 @@
 
     <!-- 3. 삶 -->
     <main class="screen" data-screen="life" hidden>
+      <p class="gen-badge" id="genBadge" hidden></p>
       <div class="life-head">
         <div class="who">
           <span class="who-flag" id="lifeFlag"></span>
@@ -182,6 +208,16 @@
 
       <article class="receipt" id="receipt"></article>
 
+      <section class="card daily-card" id="dailyCard" hidden>
+        <div class="card-head">
+          <h2>오늘의 결과</h2>
+          <span class="chip" id="dailyStreakChip"></span>
+        </div>
+        <pre class="emoji-grid" id="dailyGrid"></pre>
+        <p class="hint left">친구에게 보내면 같은 아이를 어떻게 살았는지 비교할 수 있어요.</p>
+        <button class="ghost wide-btn" id="dailyShareBtn">결과 복사·공유</button>
+      </section>
+
       <section class="card compare" id="compare" hidden></section>
 
       <section class="card">
@@ -196,6 +232,49 @@
       </div>
       <div class="cta-bar">
         <button class="cta" id="againBtn">다시 태어나기</button>
+        <button class="cta" id="nextGenBtn" hidden>다음 세대로</button>
+      </div>
+    </main>
+
+    <!-- 4-1. 세대 사이 -->
+    <main class="screen" data-screen="bridge" hidden>
+      <section class="bridge-head">
+        <p class="eyebrow" id="bridgeEyebrow"></p>
+        <h2 id="bridgeTitle"></h2>
+        <p class="lede small" id="bridgeLede"></p>
+      </section>
+      <ol class="tree" id="bridgeTree"></ol>
+      <section class="card">
+        <h2>다음 세대가 물려받는 것</h2>
+        <ul class="gifts" id="gifts"></ul>
+      </section>
+      <div class="cta-bar">
+        <button class="cta" id="bornNextBtn">태어나기</button>
+      </div>
+    </main>
+
+    <!-- 4-2. 3대 결과 -->
+    <main class="screen" data-screen="family" hidden>
+      <section class="bridge-head">
+        <p class="eyebrow">3대의 이야기</p>
+        <h2 id="familyTitle"></h2>
+        <p class="lede small" id="familyLede"></p>
+      </section>
+      <section class="card">
+        <div class="card-head">
+          <h2>운의 대물림</h2>
+          <span class="chip">나라 안 경제적 위치</span>
+        </div>
+        <svg class="mobility" id="mobility" viewBox="0 0 320 170" role="img" aria-label="세대별 경제적 위치 변화"></svg>
+        <p class="hint left" id="mobilityNote"></p>
+      </section>
+      <ol class="tree" id="familyTree"></ol>
+      <div class="btn-row">
+        <button class="ghost" id="familyShareBtn">이미지로 공유</button>
+        <button class="ghost" data-go="sky">나의 별자리</button>
+      </div>
+      <div class="cta-bar">
+        <button class="cta" id="newFamilyBtn">새 가문 시작하기</button>
       </div>
     </main>
 
@@ -204,7 +283,7 @@
       <section class="sky-head">
         <p class="eyebrow">나의 별자리</p>
         <h2 id="skyTitle">아직 별이 없어요</h2>
-        <p class="lede small">끝까지 살아 낸 삶은 별이 됩니다. 별의 크기는 수명, 색은 평균 행복이에요.</p>
+        <p class="lede small">끝까지 살아 낸 삶은 별이 됩니다. 별의 크기는 수명, 색은 평균 행복이에요. 한 가문의 별은 금빛 선으로 이어져요.</p>
       </section>
       <canvas id="constellation" class="constellation"></canvas>
       <ul class="life-list" id="lifeList"></ul>
@@ -230,6 +309,19 @@
         <li><b>소득</b>: 1인당 GDP와 지니계수로 로그정규 분포를 만들고 가족 형편과 교육연수로 위치를 정합니다. 원화 환산은 한국 구매력 환산계수(약 870원/달러) 기준이에요.</li>
         <li><b>세계 소득 순위</b>: 세계 전체를 하나의 분포(평균 약 2만 3천 달러, 지니 약 0.62)로 근사한 추정치입니다.</li>
       </ul>
+      <h3>3대 가계도는 어떻게 이어지나요</h3>
+      <ul>
+        <li><b>형편</b>: 부모의 최종 경제적 위치(나라 안 순위)가 지역별 세대 간 상관(ρ, 북유럽 약 0.25 ~ 중남미 약 0.6)만큼 자녀에게 이어집니다. Corak(2013)과 세계은행 GDIM(2018)의 경향을 단순화한 근사치예요.</li>
+        <li><b>배움</b>: 부모의 교육연수와 ‘아이 교육 투자’ 선택이 자녀의 교육 기대치를 올립니다.</li>
+        <li><b>나라</b>: 부모가 이주했다면 다음 세대는 그 나라에서 이민 2세로 태어납니다.</li>
+        <li><b>이른 이별</b>: 부모가 일찍 세상을 떠났다면 다음 세대의 삶에서도 같은 해에 부모를 잃습니다.</li>
+        <li><b>자녀가 없다면</b>: 형제자매의 아이가 가문을 잇되, 대물림은 약해집니다.</li>
+        <li>모든 세대는 지금의 통계가 그대로 이어진다고 가정합니다.</li>
+      </ul>
+      <h3>선택의 순간</h3>
+      <p>배움·일과 돈·사랑과 가족·건강·이주와 환경·관계·가치, 7개 분야에서 지금까지 덜 나온 분야를 먼저 고릅니다. 형식은 선택, 모험(성공 확률 표시), 배분, 딜레마 네 가지예요.</p>
+      <h3>오늘의 아이</h3>
+      <p>날짜로 난수를 고정해 같은 날에는 모두가 같은 나라, 같은 집에서 태어납니다. 같은 선택을 하면 같은 삶이 펼쳐져요.</p>
       <h3>한계</h3>
       <p>통계는 평균일 뿐 한 사람의 삶을 설명하지 못합니다. 지역, 민족, 장애, 성소수자 여부처럼 삶을 크게 바꾸는 요인은 반영하지 못했어요. 이 시뮬레이션은 운의 무게를 느껴 보기 위한 것이지 예측이 아닙니다.</p>
       <h3>개인정보</h3>
@@ -242,7 +334,11 @@
   <div class="sheet-backdrop" id="sheet" hidden>
     <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetQ">
       <div class="grabber"></div>
-      <p class="eyebrow" id="sheetAge"></p>
+      <div class="sheet-meta">
+        <p class="eyebrow" id="sheetAge"></p>
+        <span class="chip" id="sheetCat"></span>
+        <span class="chip" id="sheetFmt"></span>
+      </div>
       <h3 id="sheetQ"></h3>
       <div class="choices" id="sheetChoices"></div>
     </div>

@@ -396,3 +396,76 @@ textarea {
 
 /* 하단 고정 바에 가리지 않도록 */
 .screen button, .screen textarea, .screen select { scroll-margin-bottom: 120px; }
+
+/* ===== 모드 선택 ===== */
+.modes { display: grid; gap: 10px; margin-top: 22px; }
+.mode-card {
+  position: relative; display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center;
+  text-align: left; padding: 16px; border-radius: var(--radius); min-height: 76px;
+  background: var(--surface); border: 1.5px solid var(--line);
+  transition: border-color .2s, background .2s, transform .12s;
+}
+.mode-card:active { transform: scale(.985); }
+.mode-card[aria-checked="true"] { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 9%, transparent); }
+.mode-icon { font-size: 30px; line-height: 1; text-align: center; }
+.mode-body strong { display: flex; align-items: center; gap: 8px; font-size: 16.5px; font-weight: 750; }
+.mode-body small { display: block; font-size: 13px; color: var(--mute); line-height: 1.45; margin-top: 3px; }
+.tag { font-style: normal; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px; background: var(--gold); color: var(--gold-ink); }
+.tag.ghost-tag { background: var(--surface-2); color: var(--ink-2); }
+.streak { font-weight: 800; font-size: 15px; font-variant-numeric: tabular-nums; }
+.legend-note { font-weight: 400; color: var(--mute); font-size: 11.5px; margin-left: 4px; }
+.dim { opacity: .4; pointer-events: none; }
+
+/* ===== 삶 화면 배지 ===== */
+.gen-badge {
+  display: inline-block; margin: 6px 0 0; padding: 5px 12px; border-radius: 99px;
+  font-size: 13px; font-weight: 700; color: var(--gold); background: color-mix(in srgb, var(--gold) 12%, transparent);
+}
+
+/* ===== 선택 시트 ===== */
+.sheet-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.sheet-meta .eyebrow { margin: 0 4px 0 0; }
+.chip[data-fmt="risk"] { color: var(--health); border-color: color-mix(in srgb, var(--health) 40%, transparent); }
+.chip[data-fmt="split"] { color: var(--bond); border-color: color-mix(in srgb, var(--bond) 40%, transparent); }
+.chip[data-fmt="dilemma"] { color: var(--mind); border-color: color-mix(in srgb, var(--mind) 40%, transparent); }
+.choice.luck { background: transparent; border-style: dashed; }
+
+/* ===== 오늘의 결과 ===== */
+.emoji-grid {
+  margin: 0; padding: 14px 16px; border-radius: 14px; background: var(--surface-2);
+  font-family: var(--font); font-size: 15px; line-height: 1.8; white-space: pre-wrap; word-break: break-word;
+}
+.hint.left { text-align: left; }
+.wide-btn { width: 100%; margin-top: 12px; }
+
+/* ===== 가계도 ===== */
+.bridge-head { padding: 20px 0 4px; }
+.bridge-head h2 { font-size: 26px; }
+.tree { list-style: none; margin: 18px 0 0; padding: 0 0 0 4px; position: relative; }
+.tree::before { content: ""; position: absolute; left: 21px; top: 26px; bottom: 26px; width: 2px; background: linear-gradient(var(--gold), color-mix(in srgb, var(--gold) 20%, transparent)); }
+.node { position: relative; display: grid; grid-template-columns: 36px 1fr; gap: 10px; align-items: center; margin-bottom: 10px; }
+.node-gen {
+  position: relative; z-index: 1; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--gold); color: var(--gold-ink); font-size: 12px; font-weight: 800;
+}
+.node.unborn .node-gen { background: var(--bg-2); color: var(--gold); border: 2px dashed var(--gold); }
+.node-card {
+  width: 100%; display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: center; text-align: left;
+  padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line);
+}
+.node.unborn .node-card { border-style: dashed; opacity: .75; }
+.node-flag { font-size: 26px; line-height: 1; }
+.node-body strong { display: block; font-size: 14.5px; }
+.node-body small { display: block; font-size: 12px; color: var(--mute); }
+.node-pct { font-size: 13px; font-weight: 800; color: var(--bond); white-space: nowrap; }
+
+.gifts { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.gifts li { display: grid; grid-template-columns: 28px 1fr; gap: 8px; font-size: 15px; color: var(--ink-2); }
+.gifts li span { font-size: 18px; }
+
+.mobility { width: 100%; height: auto; }
+.mobility .g { stroke: var(--line); stroke-width: 1; }
+.mobility .ax { fill: var(--mute); font-size: 10px; font-family: var(--font); }
+.mobility .ls { fill: none; stroke: var(--mute); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.mobility .le { fill: none; stroke: var(--bond); stroke-width: 2.5; }
+.mobility .pt { fill: var(--bond); stroke: var(--bg); stroke-width: 2; }
