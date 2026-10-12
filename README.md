@@ -53,3 +53,14 @@ js/app.js             UI · 저장 · 공유
 sw.js                 오프라인 캐시
 manifest.webmanifest  PWA 설정
 ```
+
+## 스토어 에셋 (Canva 제작)
+
+| 파일 | 규격 | 용도 |
+|---|---|---|
+| `store/feature-graphic.png` | 1024×500 | Google Play 그래픽 이미지 |
+| `store/screenshot-1~6.png` | 1080×1920 | 휴대전화 스크린샷 (홈 · 출생 · 갈림길 · 대물림 · 3대 결과 · 오늘의 아이) |
+| `icons/icon-512.png` | 512×512 | 앱 아이콘 |
+| `img/hero.webp` | 720×720 | 앱 홈·세대 화면 일러스트 (Canva AI 생성) |
+
+원본은 Canva의 「ONCE 앱 스토어 피처 그래픽」, 「ONCE 앱 스토어 스크린샷」, 「ONCE 히어로 일러스트」 디자인에서 수정할 수 있어요.

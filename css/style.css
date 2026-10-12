@@ -469,3 +469,29 @@ textarea {
 .mobility .ls { fill: none; stroke: var(--mute); stroke-width: 1.5; stroke-dasharray: 4 4; }
 .mobility .le { fill: none; stroke: var(--bond); stroke-width: 2.5; }
 .mobility .pt { fill: var(--bond); stroke: var(--bg); stroke-width: 2; }
+
+/* ===== Canva 일러스트 ===== */
+.hero { position: relative; }
+.hero > *:not(.hero-art) { position: relative; z-index: 1; }
+.hero-art {
+  position: absolute; z-index: 0; top: -6px; right: -28px; width: 210px; height: 210px; border-radius: 50%;
+  opacity: .75; pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle, #000 52%, transparent 71%);
+          mask-image: radial-gradient(circle, #000 52%, transparent 71%);
+}
+.tree-art {
+  display: block; width: 132px; height: 132px; margin: 4px 0 10px -10px; border-radius: 50%;
+  -webkit-mask-image: radial-gradient(circle, #000 55%, transparent 71%);
+          mask-image: radial-gradient(circle, #000 55%, transparent 71%);
+}
+/* 밝은 테마에서는 밤하늘 창처럼 작고 또렷하게 */
+[data-theme="light"] .hero-art {
+  width: 132px; height: 132px; top: 14px; right: 0; opacity: 1;
+  -webkit-mask-image: radial-gradient(circle, #000 66%, transparent 70%);
+          mask-image: radial-gradient(circle, #000 66%, transparent 70%);
+  box-shadow: 0 10px 30px rgba(20, 25, 60, .25);
+}
+[data-theme="light"] .tree-art {
+  -webkit-mask-image: radial-gradient(circle, #000 66%, transparent 70%);
+          mask-image: radial-gradient(circle, #000 66%, transparent 70%);
+}

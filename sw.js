@@ -1,8 +1,8 @@
 // 앱 셸을 캐시해 오프라인에서도 열리게 합니다
-const CACHE = "once-v2";
+const CACHE = "once-v3";
 const SHELL = [
   "./", "index.html", "css/style.css", "js/data.js", "js/sim.js", "js/app.js",
-  "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png",
+  "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "img/hero.webp",
 ];
 
 self.addEventListener("install", (e) => {
