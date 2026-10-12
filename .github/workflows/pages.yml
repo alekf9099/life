@@ -1,8 +1,8 @@
 name: Deploy to GitHub Pages
 
+# 저장소 Settings → Pages → Source가 "GitHub Actions"일 때만 사용합니다.
+# "Deploy from a branch"로 설정했다면 이 워크플로는 필요 없습니다.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -23,8 +23,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Collect site files
+        run: |
+          mkdir _site
+          cp -r index.html privacy.html manifest.webmanifest sw.js .nojekyll css js img icons _site/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4

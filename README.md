@@ -39,8 +39,8 @@ python3 -m http.server 8000
 
 ## 배포
 
-`main` 브랜치에 푸시하면 GitHub Actions가 GitHub Pages로 배포합니다.
-(저장소 Settings → Pages → Source를 **GitHub Actions**로 설정)
+저장소 **Settings → Pages → Source: Deploy from a branch**, 브랜치 `ccr-c7eac9d8-vpqtqo` · `/ (root)`로 저장하면
+푸시할 때마다 https://alekf9099.github.io/life/ 에 자동 배포됩니다.
 
 ## 구조
 
