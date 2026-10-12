@@ -1,0 +1,59 @@
+name: Android (TWA) build
+
+# 수동 실행 또는 v로 시작하는 태그(v1.0.0 등)를 푸시하면 빌드합니다.
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Build AAB and APK
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon bundleRelease assembleRelease
+
+      # 저장소 Secrets에 업로드 키가 있으면 서명합니다.
+      # ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD
+      - name: Sign
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          mkdir -p dist
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::warning::업로드 키 Secrets가 없어 서명하지 않은 파일만 만듭니다."
+            cp app/build/outputs/bundle/release/app-release.aab dist/ONCE-unsigned.aab
+            cp app/build/outputs/apk/release/app-release-unsigned.apk dist/ONCE-unsigned.apk
+            exit 0
+          fi
+          echo "$KEYSTORE_BASE64" | base64 -d > upload.keystore
+          BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
+          cp app/build/outputs/bundle/release/app-release.aab dist/ONCE.aab
+          jarsigner -keystore upload.keystore -storepass "$STORE_PASS" -keypass "$KEY_PASS" \
+            -sigalg SHA256withRSA -digestalg SHA-256 dist/ONCE.aab "$KEY_ALIAS"
+          "$BT/zipalign" -f -p 4 app/build/outputs/apk/release/app-release-unsigned.apk aligned.apk
+          "$BT/apksigner" sign --ks upload.keystore --ks-pass "pass:$STORE_PASS" \
+            --ks-key-alias "$KEY_ALIAS" --key-pass "pass:$KEY_PASS" --out dist/ONCE.apk aligned.apk
+          rm -f upload.keystore aligned.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ONCE-android
+          path: android/dist/

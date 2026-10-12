@@ -1,0 +1,12 @@
+# 서명 키는 절대 커밋하지 마세요
+*.keystore
+*.jks
+keystore.properties
+# 빌드 결과물
+.gradle/
+build/
+app/build/
+local.properties
+*.apk
+*.aab
+*.idsig

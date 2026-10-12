@@ -64,3 +64,10 @@ manifest.webmanifest  PWA 설정
 | `img/hero.webp` | 720×720 | 앱 홈·세대 화면 일러스트 (Canva AI 생성) |
 
 원본은 Canva의 「ONCE 앱 스토어 피처 그래픽」, 「ONCE 앱 스토어 스크린샷」, 「ONCE 히어로 일러스트」 디자인에서 수정할 수 있어요.
+
+## 안드로이드 앱 · 플레이스토어
+
+- `android/` — Trusted Web Activity 프로젝트 (패키지 `io.github.alekf9099.once`). 빌드·서명·주소창 제거 방법은 [android/README.md](android/README.md)
+- `.github/workflows/android.yml` — Actions에서 AAB/APK 자동 빌드 (업로드 키는 Secrets로)
+- `privacy.html` — 개인정보처리방침 (플레이스토어 등록 필수)
+- `store/listing-ko.md` — 스토어 설명 문구, 데이터 보안·콘텐츠 등급 답변 가이드
