@@ -495,3 +495,17 @@ textarea {
   -webkit-mask-image: radial-gradient(circle, #000 66%, transparent 70%);
           mask-image: radial-gradient(circle, #000 66%, transparent 70%);
 }
+
+/* ===== 확인창 · 이미지 보기 ===== */
+.confirm-sheet h3 { margin-bottom: 6px; }
+.confirm-body { margin: 0; color: var(--ink-2); font-size: 15px; }
+.danger-btn { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 45%, transparent); }
+.img-view {
+  position: fixed; inset: 0; z-index: 60; background: rgba(4, 6, 16, .88);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  padding: calc(20px + env(safe-area-inset-top, 0px)) 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  animation: fadeIn .2s ease;
+}
+.img-view img { max-width: min(100%, 420px); max-height: 70vh; border-radius: 12px; box-shadow: var(--shadow); }
+.img-view p { margin: 0; color: #DDE3FF; font-size: 14px; text-align: center; }
+.img-view .ghost { flex: none; min-width: 140px; color: #EEF0F8; border-color: rgba(255,255,255,.2); background: rgba(255,255,255,.06); }

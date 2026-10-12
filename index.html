@@ -349,6 +349,26 @@
     </div>
   </div>
 
+  <!-- 확인창 -->
+  <div class="sheet-backdrop" id="confirm" hidden>
+    <div class="sheet confirm-sheet" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmBody">
+      <div class="grabber"></div>
+      <h3 id="confirmTitle"></h3>
+      <p class="confirm-body" id="confirmBody"></p>
+      <div class="btn-row">
+        <button class="ghost" id="confirmCancel">취소</button>
+        <button class="ghost danger-btn" id="confirmOk">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 공유 이미지 보기 -->
+  <div class="img-view" id="imgView" hidden>
+    <img id="imgViewImg" alt="공유용 이미지">
+    <p>이미지를 길게 누르거나 우클릭해서 저장하세요</p>
+    <button class="ghost" id="imgViewClose">닫기</button>
+  </div>
+
   <div class="toast" id="toast" role="status" hidden></div>
 
   <script src="js/data.js"></script>

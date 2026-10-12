@@ -25,8 +25,10 @@
   const MAX_LIVES = 60;
 
   /* ---------- 테마 ---------- */
+  // 처음 열릴 때 바깥(예: 앱 뷰어)이 정한 테마가 있으면 따릅니다
+  const hostTheme = document.documentElement.dataset.theme;
   function applyTheme() {
-    const t = settings.theme || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+    const t = settings.theme || hostTheme || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
     document.documentElement.dataset.theme = t;
     $('meta[name="theme-color"]').content = t === "light" ? "#F7F2E8" : "#070B1A";
   }
@@ -49,10 +51,35 @@
   document.addEventListener("click", (e) => {
     const b = e.target.closest("[data-go]");
     if (!b) return;
-    if (current === "life" && life && life.alive && !confirm("지금 삶을 멈추고 나갈까요? 이 삶은 저장되지 않아요.")) return;
-    if (current === "life" || current === "birth") abandon();
-    go(b.dataset.go);
+    const leave = () => {
+      if (current === "life" || current === "birth") abandon();
+      go(b.dataset.go);
+    };
+    if (current === "life" && life && life.alive) {
+      const wasPlaying = playing;
+      pause();
+      askConfirm("지금 삶을 멈추고 나갈까요?", "이 삶은 저장되지 않아요.", "나가기").then((ok) => (ok ? leave() : wasPlaying && play()));
+      return;
+    }
+    leave();
   });
+
+  // 브라우저 confirm() 대신 쓰는 화면 안 확인창 (일부 환경에서는 confirm이 막혀 있음)
+  function askConfirm(title, body, okLabel) {
+    return new Promise((resolve) => {
+      const box = $("#confirm");
+      $("#confirmTitle").textContent = title;
+      $("#confirmBody").textContent = body;
+      $("#confirmOk").textContent = okLabel;
+      box.hidden = false;
+      const done = (v) => { box.hidden = true; box.onclick = null; resolve(v); };
+      box.onclick = (e) => {
+        if (e.target.closest("#confirmOk")) done(true);
+        else if (e.target.closest("#confirmCancel") || e.target === box) done(false);
+      };
+      $("#confirmCancel").focus({ preventScroll: true });
+    });
+  }
 
   function toast(msg, ms = 2600) {
     const t = $("#toast");
@@ -703,11 +730,15 @@
         return;
       }
     } catch (e) { if (e && e.name === "AbortError") return; }
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob); a.download = name; a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-    toast("이미지를 저장했어요");
+    // 공유를 쓸 수 없으면 이미지를 띄워 길게 눌러(또는 우클릭으로) 저장하게 합니다
+    const view = $("#imgView"), img = $("#imgViewImg");
+    if (img.src.startsWith("blob:")) URL.revokeObjectURL(img.src);
+    img.src = URL.createObjectURL(blob);
+    view.hidden = false;
   }
+  $("#imgView").addEventListener("click", (e) => {
+    if (e.target.closest("#imgViewClose") || e.target === e.currentTarget) e.currentTarget.hidden = true;
+  });
 
   async function baseCanvas() {
     try { await document.fonts.ready; } catch (_) {}
@@ -843,8 +874,8 @@
     showEnd(l);
   }
 
-  $("#clearBtn").addEventListener("click", () => {
-    if (!confirm("모든 별을 지울까요? 오늘의 아이 연속 기록도 사라져요. 되돌릴 수 없어요.")) return;
+  $("#clearBtn").addEventListener("click", async () => {
+    if (!(await askConfirm("모든 별을 지울까요?", "오늘의 아이 연속 기록도 사라지고, 되돌릴 수 없어요.", "모두 지우기"))) return;
     lives = []; families = []; dailies = {};
     store.set("lives", lives); store.set("families", families); store.set("dailies", dailies);
     renderSky(); renderHome();
