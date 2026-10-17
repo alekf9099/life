@@ -10,6 +10,25 @@
   const GEN_NAME = ["", "1대 · 나", "2대 · 내 아이", "3대 · 내 손주"];
   const SITE = "https://alekf9099.github.io/life/";
 
+  /* ---------- Canva 캐릭터 · 아이콘 ---------- */
+  const STAGES = [[3, "baby", "아기"], [13, "child", "어린이"], [20, "teen", "청소년"], [60, "adult", "어른"], [999, "elder", "노년"]];
+  function stageOf(age) { return STAGES.find(([max]) => age < max); }
+  function charSrc(age, sex) {
+    const [, key] = stageOf(age);
+    return key === "baby" ? "img/char/baby.webp" : `img/char/${key}-${sex === "F" ? "f" : "m"}.webp`;
+  }
+  const catIcon = (cat) => `img/icon/icon-${cat}.webp`;
+  // 장면 그리기: 도시/시골 배경 + 나이에 맞는 캐릭터
+  function setStage(el, p, opts = {}) {
+    el.classList.toggle("city", !!p.urban);
+    const img = $(".stage-char", el), src = charSrc(p.age, p.sex);
+    if (img.getAttribute("src") !== src) {
+      img.classList.remove("swap"); void img.offsetWidth; img.classList.add("swap");
+      img.src = src;
+    }
+    if (opts.label) opts.label.textContent = `${stageOf(p.age)[2]} · ${p.c.flag} ${p.urban ? "도시" : "시골"}`;
+  }
+
   /* ---------- 저장소 ---------- */
   const store = {
     get(key, fallback) {
@@ -273,6 +292,7 @@
 
   function revealBirth(p) {
     const c = p.c;
+    setStage($("#birthStage"), p);
     $("#birthHint").textContent = run.kind === "family" ? `${GEN_NAME[p.gen]} · 여기에서 태어났어요` : "여기에서 태어났어요";
     const share = shareOf(c, run.kind === "daily" ? "births" : settings.mode) * 100;
     $("#birthOdds").textContent = run.kind === "family" && p.gen > 1
@@ -321,6 +341,8 @@
     }
     $("#lifeFlag").textContent = p.c.flag;
     $("#lifeCountry").textContent = p.c.name;
+    setStage($("#lifeStage"), p, { label: $("#stageLabel") });
+    $("#lifeStage").classList.toggle("gone", !p.alive);
     $("#lifeYear").textContent = `${p.birthYear + p.age}년 · ${p.abroad ? "이주해 와서" : p.urban ? "도시에서" : "시골에서"}`;
 
     for (const k of ["h", "j", "k", "r"]) {
@@ -348,6 +370,7 @@
       li.className = e.tone;
       li.innerHTML = `<span class="yr">${prev && prev.age === e.age ? "" : e.age + "세"}</span><p></p>`;
       $("p", li).textContent = e.text;
+      if (e.cat) $("p", li).insertAdjacentHTML("afterbegin", `<img class="feed-icon" src="${catIcon(e.cat)}" alt="">`);
       feed.prepend(li);
     }
 
@@ -420,7 +443,8 @@
   function askDecision(p, d) {
     vibrate(15);
     $("#sheetAge").textContent = `${p.age}세 · 갈림길`;
-    $("#sheetCat").textContent = `${d.catIcon} ${d.catName}`;
+    $("#sheetCat").innerHTML = `<img src="${catIcon(d.cat)}" alt="">`;
+    $("#sheetCat").append(d.catName);
     $("#sheetFmt").textContent = d.fmtName;
     $("#sheetFmt").dataset.fmt = d.fmt;
     $("#sheetQ").textContent = d.q;
@@ -497,6 +521,7 @@
   function showEnd(rec) {
     shown = rec;
     const fam = run && run.kind === "family" && rec.familyId === run.familyId;
+    $("#endChar").src = charSrc(rec.age, rec.sex);
     $("#endTitle").textContent = (rec.gen ? `${GEN_NAME[rec.gen]} · ` : "") + (rec.age === 0 ? "첫돌을 맞지 못한 삶" : `${rec.age}년의 삶`);
     $("#receipt").innerHTML = receiptHTML(rec);
     $("#receipt").style.animation = "";
@@ -641,7 +666,7 @@
       <li class="node" data-id="${r.id}">
         <span class="node-gen">${r.gen}대</span>
         <button class="node-card">
-          <span class="node-flag">${r.flag}</span>
+          <span class="node-flag"><img src="${charSrc(r.age, r.sex)}" alt=""><i>${r.flag}</i></span>
           <span class="node-body">
             <strong>${esc(r.name)} · ${r.sex === "F" ? "여성" : "남성"} · ${r.age}세</strong>
             <small>${r.birthYear}–${r.birthYear + r.age} · ${esc(r.job || "일하지 못함")} · 학교 ${r.school}년</small>
@@ -649,7 +674,7 @@
           <span class="node-pct" title="나라 안 경제적 위치">${pctText(r.localEnd)}</span>
         </button>
       </li>`).join("");
-    const ghost = nextGen ? `<li class="node unborn"><span class="node-gen">${nextGen}대</span><div class="node-card"><span class="node-flag">👶</span><span class="node-body"><strong>곧 태어나요</strong><small>${esc(GEN_NAME[nextGen])}</small></span></div></li>` : "";
+    const ghost = nextGen ? `<li class="node unborn"><span class="node-gen">${nextGen}대</span><div class="node-card"><span class="node-flag"><img src="img/char/baby.webp" alt=""></span><span class="node-body"><strong>곧 태어나요</strong><small>${esc(GEN_NAME[nextGen])}</small></span></div></li>` : "";
     return nodes + ghost;
   }
   function bindTree(el, recs) {
@@ -669,7 +694,8 @@
       : `${run.next.parentAgeAtBirth}살에 얻은 아이예요. 당신이 남긴 것들이 이 아이의 출발선이 됩니다.`;
     $("#bridgeTree").innerHTML = treeHTML(run.recs, ng);
     bindTree($("#bridgeTree"), run.recs);
-    $("#gifts").innerHTML = run.next.gifts.map(([i, t]) => `<li><span>${i}</span>${esc(t)}</li>`).join("");
+    const GIFT_ICON = { "📍": "move", "🧭": "move", "🎓": "edu", "📚": "edu", "🏠": "love", "🌱": "value", "🌳": "family" };
+    $("#gifts").innerHTML = run.next.gifts.map(([i, t]) => `<li><span>${GIFT_ICON[i] ? `<img class="gift-icon" src="${catIcon(GIFT_ICON[i])}" alt="">` : i}</span>${esc(t)}</li>`).join("");
     $("#bornNextBtn").textContent = `${ng}대로 태어나기`;
     go("bridge");
   }

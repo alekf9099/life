@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" data-theme="dark">
+<html lang="ko">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -49,14 +49,14 @@
 
       <section class="modes" role="radiogroup" aria-label="모드 선택">
         <button class="mode-card" role="radio" data-mode="family">
-          <span class="mode-icon">🌳</span>
+          <span class="mode-icon"><img src="img/icon/icon-family.webp" alt="" width="40" height="40"></span>
           <span class="mode-body">
             <strong>3대 가계도 <em class="tag">추천</em></strong>
             <small>나 → 내 아이 → 내 손주. 형편·배움·이주·유산이 다음 세대로 이어져요</small>
           </span>
         </button>
         <button class="mode-card" role="radio" data-mode="daily">
-          <span class="mode-icon">📅</span>
+          <span class="mode-icon"><img src="img/icon/icon-daily.webp" alt="" width="40" height="40"></span>
           <span class="mode-body">
             <strong>오늘의 아이 <em class="tag ghost-tag" id="dailyNo">#1</em></strong>
             <small id="dailyDesc">오늘 하루, 모두가 같은 아이로 태어나요. 3분 · 하루 한 번</small>
@@ -64,7 +64,7 @@
           <span class="streak" id="streak" hidden></span>
         </button>
         <button class="mode-card" role="radio" data-mode="single">
-          <span class="mode-icon">⭐</span>
+          <span class="mode-icon"><img src="img/icon/icon-single.webp" alt="" width="40" height="40"></span>
           <span class="mode-body">
             <strong>한 생</strong>
             <small>무작위로 태어나 한 번의 삶만 살아요</small>
@@ -145,6 +145,7 @@
           <span class="r-name" id="rName">…</span>
         </div>
         <div class="birth-card" id="birthCard" hidden>
+          <div class="stage stage-sm" id="birthStage" aria-hidden="true"><img class="stage-char" alt=""></div>
           <p class="odds" id="birthOdds"></p>
           <p class="birth-text" id="birthText"></p>
           <dl class="facts" id="birthFacts"></dl>
@@ -165,6 +166,11 @@
           </div>
         </div>
         <p class="age"><span id="lifeAge">0</span><small>세</small></p>
+      </div>
+
+      <div class="stage" id="lifeStage" aria-hidden="true">
+        <img class="stage-char" alt="">
+        <span class="stage-label" id="stageLabel"></span>
       </div>
 
       <div class="stats" id="stats">
@@ -204,7 +210,7 @@
     <!-- 4. 끝 -->
     <main class="screen" data-screen="end" hidden>
       <div class="end-head">
-        <div class="rising-star" aria-hidden="true"></div>
+        <img class="end-char" id="endChar" alt="" aria-hidden="true">
         <p class="eyebrow">한 생이 끝났어요</p>
         <h2 id="endTitle"></h2>
       </div>

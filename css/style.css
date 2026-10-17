@@ -509,3 +509,50 @@ textarea {
 .img-view img { max-width: min(100%, 420px); max-height: 70vh; border-radius: 12px; box-shadow: var(--shadow); }
 .img-view p { margin: 0; color: #DDE3FF; font-size: 14px; text-align: center; }
 .img-view .ghost { flex: none; min-width: 140px; color: #EEF0F8; border-color: rgba(255,255,255,.2); background: rgba(255,255,255,.06); }
+
+/* ===== Canva 캐릭터 · 아이콘 ===== */
+.mode-icon img { width: 40px; height: 40px; display: block; margin: auto; }
+[data-theme="light"] .mode-icon img, [data-theme="light"] .feed-icon, [data-theme="light"] .chip img {
+  background: #121a3d; border-radius: 10px; padding: 3px;
+}
+
+/* 장면: 시골/도시 밤 풍경 위에 나이에 맞는 캐릭터 */
+.stage {
+  position: relative; height: 176px; margin-bottom: 10px; border-radius: var(--radius); overflow: hidden;
+  background: #0f1533 url("../img/scene-village.webp") center 70% / cover no-repeat;
+  border: 1px solid var(--line);
+}
+.stage.city { background-image: url("../img/scene-city.webp"); }
+.stage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 55%, rgba(7, 11, 26, .55)); pointer-events: none; }
+.stage-char {
+  position: absolute; z-index: 1; left: 50%; bottom: 6px; width: 132px; height: 132px; transform: translateX(-50%);
+  filter: drop-shadow(0 0 14px rgba(246, 195, 91, .45)); animation: bob 3.2s ease-in-out infinite;
+}
+.stage-char.swap { animation: grow .7s cubic-bezier(.3, 1.5, .5, 1), bob 3.2s ease-in-out .7s infinite; }
+@keyframes bob { 50% { transform: translateX(-50%) translateY(-5px); } }
+@keyframes grow { from { transform: translateX(-50%) scale(.6); opacity: .2; filter: drop-shadow(0 0 40px #F6C35B) brightness(1.8); } }
+.stage.gone .stage-char { animation: fadeUp 2s ease forwards; }
+@keyframes fadeUp { to { transform: translateX(-50%) translateY(-50px); opacity: 0; } }
+.stage-label {
+  position: absolute; z-index: 1; left: 12px; bottom: 10px; font-size: 12px; font-weight: 700; color: #EEF0F8;
+  padding: 4px 10px; border-radius: 99px; background: rgba(7, 11, 26, .55); backdrop-filter: blur(6px);
+}
+.stage-sm { height: 150px; margin-bottom: 14px; }
+.stage-sm .stage-char { width: 116px; height: 116px; }
+
+.end-char {
+  display: block; width: 150px; height: 150px; margin: 0 auto 6px;
+  filter: drop-shadow(0 0 22px rgba(246, 195, 91, .55));
+  animation: rise 2.4s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.feed-icon { width: 22px; height: 22px; vertical-align: -6px; margin-right: 6px; }
+.feed li.choice p::before { display: none; }
+.chip img { width: 18px; height: 18px; vertical-align: -4px; margin-right: 4px; }
+
+.node-flag { position: relative; width: 40px; height: 40px; }
+.node-flag img { width: 40px; height: 40px; display: block; }
+.node-flag i { position: absolute; right: -6px; bottom: -4px; font-style: normal; font-size: 15px; line-height: 1; }
+.node-card { grid-template-columns: 42px 1fr auto; }
+.gift-icon { width: 24px; height: 24px; display: block; }
+[data-theme="light"] .gift-icon { background: #121a3d; border-radius: 8px; padding: 2px; }

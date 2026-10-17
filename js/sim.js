@@ -792,7 +792,7 @@ const Sim = (() => {
     const delta = score(p) - before;
     const t = delta > 1.5 ? "good" : delta < -1.5 ? "bad" : "neutral";
     p.choices.push({ age: p.age, cat: d.cat, label: d.options[idx].label, tone: t });
-    p.log.push({ age: p.age, tone: "choice", text: `「${d.options[idx].label}」 — ${text}` });
+    p.log.push({ age: p.age, tone: "choice", cat: d.cat, text: `「${d.options[idx].label}」 — ${text}` });
     return text;
   }
 
